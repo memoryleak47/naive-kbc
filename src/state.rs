@@ -15,6 +15,8 @@ impl State {
         }
     }
 
+
+    // apply all rules, as long as possible.
     fn tick(&mut self) {
         todo!()
     }
