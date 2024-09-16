@@ -3,7 +3,7 @@ use crate::*;
 use std::cmp::*;
 
 const VAR_WEIGHT: usize = 2;
-const SYM_WEIGHT: usize = 1;
+fn sym_weight(_x: Symbol) -> usize { 1 }
 
 impl PartialOrd for Term {
     fn partial_cmp(&self, other: &Term) -> Option<Ordering> {
@@ -71,7 +71,7 @@ fn weight_cmp(l: &Term, r: &Term) -> Ordering {
 fn term_weight(t: &Term) -> usize {
     match t {
         Term::Var(_) => VAR_WEIGHT,
-        Term::Fun(_, args) => args.iter().map(term_weight).sum::<usize>() + SYM_WEIGHT,
+        Term::Fun(x, args) => args.iter().map(term_weight).sum::<usize>() + sym_weight(*x),
     }
 }
 
