@@ -150,6 +150,7 @@ mod tst {
         check_incompat(fx(), y());
         check_incompat(x(), y());
         check_incompat(fc(), x());
+        check_incompat(c(), x());
     }
 
     #[test]
