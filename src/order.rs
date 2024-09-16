@@ -18,7 +18,7 @@ impl PartialOrd for Term {
             // f < g, or f=g and ...
             // l1 < r1, or l1=r1 and ...
             (Term::Function(f1, args1), Term::Function(f2, args2)) => {
-                let o = sym_order(f1, f2);
+                let o = f1.cmp(f2);
                 if o != Ordering::Equal { return Some(o); }
                 assert_eq!(args1.len(), args2.len());
                 for (l, r) in args1.iter().zip(args2.iter()) {
@@ -42,18 +42,4 @@ fn term_weight(t: &Term) -> usize {
         Term::Variable(_) => VAR_WEIGHT,
         Term::Function(_, args) => args.iter().map(term_weight).sum::<usize>() + SYM_WEIGHT,
     }
-}
-
-fn sym_order(s1: &str, s2: &str) -> Ordering {
-    let o = s1.len().cmp(&s2.len());
-    if o != Ordering::Equal {
-        return o;
-    }
-
-    for (c1, c2) in s1.chars().zip(s2.chars()) {
-        let o = c1.cmp(&c2);
-        if o != Ordering::Equal { return o; }
-    }
-
-    Ordering::Equal
 }

@@ -1,3 +1,7 @@
+use crate::*;
+
+use std::fmt::Display;
+
 // syntax: f(c) = Y.
 // capital letters are only for variables.
 
@@ -9,8 +13,21 @@ pub struct Equation {
 
 #[derive(PartialEq, Eq)]
 pub enum Term {
-    Variable(String),
+    Variable(Id),
 
     // constants are just nullary functions.
-    Function(String, Vec<Term>),
+    Function(Id, Box<[Term]>),
+}
+
+impl Term {
+    pub fn var(x: impl Display) -> Term {
+        let x = gsymb_add(x.to_string());
+        Term::Variable(x)
+    }
+
+    pub fn fun(x: impl Display, it: impl IntoIterator<Item=Term>) -> Term {
+        let x = gsymb_add(x.to_string());
+        let children = it.into_iter().collect();
+        Term::Function(x, children)
+    }
 }
