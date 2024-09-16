@@ -147,6 +147,7 @@ mod tst {
     #[test]
     fn incompat_vars() {
         check_neq(fx(), y());
+        check_neq(x(), y());
     }
 
     #[test]
