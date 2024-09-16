@@ -13,10 +13,10 @@ pub struct Equation {
 
 #[derive(PartialEq, Eq)]
 pub enum Term {
-    Variable(Id),
+    Variable(Symbol),
 
     // constants are just nullary functions.
-    Function(Id, Box<[Term]>),
+    Function(Symbol, Box<[Term]>),
 }
 
 impl Term {
