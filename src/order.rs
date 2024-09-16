@@ -131,7 +131,7 @@ mod tst {
     }
 
     #[track_caller]
-    fn check_neq(l: Term, r: Term) {
+    fn check_incompat(l: Term, r: Term) {
         assert!(!(l <= r));
         assert!(!(r <= l));
         assert!(!(l >= r));
@@ -147,13 +147,15 @@ mod tst {
 
     #[test]
     fn incompat_vars() {
-        check_neq(fx(), y());
-        check_neq(x(), y());
+        check_incompat(fx(), y());
+        check_incompat(x(), y());
+        check_incompat(fc(), x());
     }
 
     #[test]
     fn weight_chk() {
         assert!(fx() > x());
         assert!(fc() > c());
+        assert!(fx() > c());
     }
 }
