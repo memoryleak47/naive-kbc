@@ -117,9 +117,10 @@ mod tst {
 
     fn x() -> Term { Term::var("X") }
     fn y() -> Term { Term::var("Y") }
+    fn c() -> Term { Term::cst("c") }
     fn fx() -> Term { Term::fun("f", [x()]) }
     fn fy() -> Term { Term::fun("f", [y()]) }
-    fn c() -> Term { Term::cst("c") }
+    fn fc() -> Term { Term::fun("f", [c()]) }
 
     #[track_caller]
     fn check_eq(l: Term, r: Term) {
@@ -153,5 +154,6 @@ mod tst {
     #[test]
     fn weight_chk() {
         assert!(fx() > x());
+        assert!(fc() > c());
     }
 }
