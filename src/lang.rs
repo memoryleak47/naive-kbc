@@ -13,21 +13,26 @@ pub struct Equation {
 
 #[derive(PartialEq, Eq)]
 pub enum Term {
-    Variable(Symbol),
+    Var(Symbol),
 
     // constants are just nullary functions.
-    Function(Symbol, Box<[Term]>),
+    Fun(Symbol, Box<[Term]>),
 }
 
 impl Term {
     pub fn var(x: impl Display) -> Term {
         let x = gsymb_add(x.to_string());
-        Term::Variable(x)
+        Term::Var(x)
     }
 
     pub fn fun(x: impl Display, it: impl IntoIterator<Item=Term>) -> Term {
         let x = gsymb_add(x.to_string());
         let children = it.into_iter().collect();
-        Term::Function(x, children)
+        Term::Fun(x, children)
+    }
+
+    pub fn cst(x: impl Display) -> Term {
+        let x = gsymb_add(x.to_string());
+        Term::Fun(x, Box::new([]))
     }
 }
