@@ -59,17 +59,13 @@ impl PartialOrd for Symbol {
         let a = gsymb_get(*a);
         let b = gsymb_get(*b);
 
-        let o = a.len().cmp(&b.len());
-        if o != Ordering::Equal {
-            return Some(o);
-        }
-
         for (ca, cb) in a.chars().zip(b.chars()) {
             let o = ca.cmp(&cb);
             if o != Ordering::Equal { return Some(o); }
         }
 
-        Some(Ordering::Equal)
+        let o = a.len().cmp(&b.len());
+        Some(o)
     }
 }
 

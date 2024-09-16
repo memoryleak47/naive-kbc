@@ -118,9 +118,13 @@ mod tst {
     fn x() -> Term { Term::var("X") }
     fn y() -> Term { Term::var("Y") }
     fn c() -> Term { Term::cst("c") }
+    fn c2() -> Term { Term::cst("c2") }
+    fn d() -> Term { Term::cst("d") }
     fn fx() -> Term { Term::fun("f", [x()]) }
     fn fy() -> Term { Term::fun("f", [y()]) }
     fn fc() -> Term { Term::fun("f", [c()]) }
+    fn fxy() -> Term { Term::fun("f", [x(), y()]) }
+    fn fyx() -> Term { Term::fun("f", [y(), x()]) }
 
     #[track_caller]
     fn check_eq(l: Term, r: Term) {
@@ -143,6 +147,7 @@ mod tst {
         check_eq(c(), c());
         check_eq(x(), x());
         check_eq(fx(), fx());
+        check_eq(fxy(), fxy());
     }
 
     #[test]
@@ -158,5 +163,13 @@ mod tst {
         assert!(fx() > x());
         assert!(fc() > c());
         assert!(fx() > c());
+    }
+
+    #[test]
+    fn lex_chk() {
+        assert!(c() < d());
+        assert!(c() < c2());
+        assert!(c2() < d());
+        check_incompat(fxy(), fyx());
     }
 }
