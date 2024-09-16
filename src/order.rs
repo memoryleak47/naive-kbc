@@ -2,7 +2,7 @@ use crate::*;
 
 use std::cmp::*;
 
-const VAR_WEIGHT: usize = 2;
+const VAR_WEIGHT: usize = 1;
 fn sym_weight(_x: Symbol) -> usize { 1 }
 
 impl PartialOrd for Term {
