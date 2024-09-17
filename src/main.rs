@@ -16,7 +16,8 @@ mod parse;
 pub use parse::*;
 
 fn main() {
-    let fx: Term = Term::parse("f(X)").unwrap();
-    let y: Term = Term::parse("Y").unwrap();
-    dbg!(fx.partial_cmp(&y));
+    let t = |x| Term::parse(x).unwrap();
+    dbg!(t("f(X)").partial_cmp(&t("Y")));
+    dbg!(t("f(X)").partial_cmp(&t("X")));
+    dbg!(t("f(a, X)").partial_cmp(&t("X")));
 }

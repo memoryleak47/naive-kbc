@@ -39,7 +39,7 @@ fn tokenize(s: &str) -> Option<Vec<Token>> {
             tokens.push(Token::RParen);
         } else if c == ',' {
             tokens.push(Token::Comma);
-        } else {
+        } else if !c.is_whitespace() {
             return None;
         }
     }
@@ -90,16 +90,16 @@ impl Parse for Term {
             return Some((tokens, term));
         };
 
-        let mut outer_tokens = tokens;
+        let mut tokens = tokens;
         let mut children = Vec::new();
         loop {
-            let (tokens, t) = Term::assemble(tokens)?;
+            let (tokens2, t) = Term::assemble(tokens)?;
             children.push(t);
-            outer_tokens = tokens;
-            let [Token::Comma, tokens@..] = outer_tokens else { break; };
-            outer_tokens = tokens;
+            tokens = tokens2;
+            let [Token::Comma, tokens2@..] = tokens else { break; };
+            tokens = tokens2;
         }
-        let [Token::RParen, tokens@..] = outer_tokens else { return None; };
+        let [Token::RParen, tokens@..] = tokens else { return None; };
         let term = Term::Fun(f, children.into_boxed_slice());
         Some((tokens, term))
     }
