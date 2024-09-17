@@ -12,11 +12,11 @@ pub use order::*;
 mod symbol;
 pub use symbol::*;
 
-fn main() {
-    // f(X)
-    let fx: Term = Term::fun("f", [Term::var("X")]);
+mod parse;
+pub use parse::*;
 
-    // X
-    let x: Term = Term::var("Y");
-    dbg!(fx.partial_cmp(&x));
+fn main() {
+    let fx: Term = Term::parse("f(X)").unwrap();
+    let y: Term = Term::parse("Y").unwrap();
+    dbg!(fx.partial_cmp(&y));
 }
