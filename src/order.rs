@@ -2,6 +2,39 @@ use crate::*;
 
 use std::cmp::*;
 
+// checks t1 < t2 of a Knuth-bendix ordering.
+fn lt(t1: &Term, t2: &Term) -> bool {
+    // make sure that no variable comes up more often in u than in v.
+    let vars1 = get_vars(t1);
+    let vars2 = get_vars(t2);
+    for (v, c1) in &vars1 {
+        let c2 = vars2.get(v).unwrap_or(&0);
+        if c2 < c1 { return false; }
+    }
+
+    // weight check.
+    let w1 = term_weight(t1);
+    let w2 = term_weight(t2);
+    if w1 < w2 { return true; }
+    if w1 > w2 { return false; }
+
+    match (t1, t2) {
+        (Term::Fun(f1, children1), Term::Fun(f2, children2)) => {
+            // lexicographic check:
+            if f1 < f2 { return true; }
+            if f1 > f2 { return false; }
+
+            // recursion:
+            for (c1, c2) in children1.iter().zip(children2.iter()) {
+                if lt(c1, c2) { return true; }
+                if c1 != c2 { return false; }
+            }
+            false
+        },
+        _ => false,
+    }
+}
+
 const VAR_WEIGHT: usize = 1;
 fn sym_weight(_x: Symbol) -> usize { 1 }
 
