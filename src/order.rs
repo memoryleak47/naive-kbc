@@ -158,6 +158,25 @@ fn get_syms(l: &Term, out: &mut Vec<(Symbol, bool)>) {
 mod tst {
     use crate::*;
 
+    fn kbo_assert(x: &str) {
+        for op in ["~", "<=", ">=", "==", "<", ">"] {
+            if x.contains(op) { // unrelated
+                let [l, r] = *x.split(op).collect::<Vec<_>>() else { panic!() };
+                let l = Term::parse(l).unwrap();
+                let r = Term::parse(r).unwrap();
+                match op {
+                    "~" => assert!(l.partial_cmp(&r).is_none()),
+                    "<=" => assert!(l <= r),
+                    ">=" => assert!(l >= r),
+                    "==" => assert!(l == r),
+                    "<" => assert!(l < r),
+                    ">" => assert!(l > r),
+                    _ => unreachable!(),
+                }
+            }
+        }
+    }
+
     fn x() -> Term { Term::var("X") }
     fn y() -> Term { Term::var("Y") }
     fn c() -> Term { Term::cst("c") }
