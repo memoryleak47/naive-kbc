@@ -229,9 +229,9 @@ mod tst {
 
     #[test]
     fn lex_chk() {
-        assert!(c() < d());
-        assert!(c() < c2());
-        assert!(c2() < d());
+        kbo_assert("c < d");
+        kbo_assert("c < c2");
+        kbo_assert("c2 < d");
         check_incompat(fxy(), fyx());
     }
 }
