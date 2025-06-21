@@ -30,10 +30,8 @@ impl PartialOrd for Term {
 
 // returns None, if both terms have a majority in one variable.
 fn var_cmp(l: &Term, r: &Term) -> Option<Ordering> {
-    let mut lc = BTreeMap::new();
-    let mut rc = BTreeMap::new();
-    get_vars(l, &mut lc);
-    get_vars(r, &mut rc);
+    let lc = get_vars(l);
+    let rc = get_vars(r);
 
     let mut out = Ordering::Equal;
 
@@ -56,17 +54,23 @@ fn merge_opt_orderings(a: Ordering, b: Ordering) -> Option<Ordering> {
     }
 }
 
-fn get_vars(t: &Term, acc: &mut BTreeMap<Symbol, usize>) {
+fn acc_vars(t: &Term, acc: &mut BTreeMap<Symbol, usize>) {
     match t {
         Term::Var(v) => {
             *acc.entry(*v).or_default() += 1;
         }
         Term::Fun(f, children) => {
             for x in children.iter() {
-                get_vars(x, acc);
+                acc_vars(x, acc);
             }
         },
     }
+}
+
+fn get_vars(t: &Term) -> BTreeMap<Symbol, usize> {
+    let mut out = BTreeMap::new();
+    acc_vars(&t, &mut out);
+    out
 }
 
 // weight_cmp:
