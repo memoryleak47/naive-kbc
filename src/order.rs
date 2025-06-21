@@ -207,4 +207,10 @@ mod tst {
         kbo_assert("c2 < d");
         kbo_assert("f(X, Y) ~ f(Y, X)");
     }
+
+    // TODO this should work! but we currently implement "fake KBO" instead of KBO. So this is why it fails.
+    #[test]
+    fn assoc() {
+        kbo_assert("f(f(X, Y), Z) > f(X, f(Y, Z))");
+    }
 }
