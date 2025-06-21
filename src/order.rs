@@ -28,7 +28,7 @@ impl PartialOrd for Term {
     }
 }
 
-// var_cmp:
+// returns None, if both terms have a majority in one variable.
 fn var_cmp(l: &Term, r: &Term) -> Option<Ordering> {
     let mut lc = BTreeMap::new();
     let mut rc = BTreeMap::new();
