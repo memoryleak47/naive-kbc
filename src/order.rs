@@ -168,7 +168,7 @@ mod tst {
                     "~" => assert!(l.partial_cmp(&r).is_none()),
                     "<=" => assert!(l <= r),
                     ">=" => assert!(l >= r),
-                    "==" => assert!(l == r),
+                    "==" => { assert!(l == r); assert!(l <= r); assert!(r <= l); },
                     "<" => assert!(l < r),
                     ">" => assert!(l > r),
                     _ => unreachable!(),
@@ -177,54 +177,27 @@ mod tst {
         }
     }
 
-    fn x() -> Term { Term::var("X") }
-    fn y() -> Term { Term::var("Y") }
-    fn c() -> Term { Term::cst("c") }
-    fn c2() -> Term { Term::cst("c2") }
-    fn d() -> Term { Term::cst("d") }
-    fn fx() -> Term { Term::fun("f", [x()]) }
-    fn fy() -> Term { Term::fun("f", [y()]) }
-    fn fc() -> Term { Term::fun("f", [c()]) }
-    fn fxy() -> Term { Term::fun("f", [x(), y()]) }
-    fn fyx() -> Term { Term::fun("f", [y(), x()]) }
-
-    #[track_caller]
-    fn check_eq(l: Term, r: Term) {
-        assert!(l <= r);
-        assert!(r <= l);
-        assert!(l >= r);
-        assert!(r >= l);
-    }
-
-    #[track_caller]
-    fn check_incompat(l: Term, r: Term) {
-        assert!(!(l <= r));
-        assert!(!(r <= l));
-        assert!(!(l >= r));
-        assert!(!(r >= l));
-    }
-
     #[test]
     fn refl() {
-        check_eq(c(), c());
-        check_eq(x(), x());
-        check_eq(fx(), fx());
-        check_eq(fxy(), fxy());
+        kbo_assert("c == c");
+        kbo_assert("X == X");
+        kbo_assert("f(X) == f(X)");
+        kbo_assert("f(X, Y) == f(X, Y)");
     }
 
     #[test]
     fn incompat_vars() {
-        check_incompat(fx(), y());
-        check_incompat(x(), y());
-        check_incompat(fc(), x());
-        check_incompat(c(), x());
+        kbo_assert("f(X) ~ Y");
+        kbo_assert("X ~ Y");
+        kbo_assert("f(c) ~ X");
+        kbo_assert("c ~ X");
     }
 
     #[test]
     fn weight_chk() {
-        assert!(fx() > x());
-        assert!(fc() > c());
-        assert!(fx() > c());
+        kbo_assert("f(X) > X");
+        kbo_assert("f(c) > c");
+        kbo_assert("f(X) > c");
     }
 
     #[test]
@@ -232,6 +205,6 @@ mod tst {
         kbo_assert("c < d");
         kbo_assert("c < c2");
         kbo_assert("c2 < d");
-        check_incompat(fxy(), fyx());
+        kbo_assert("f(X, Y) ~ f(Y, X)");
     }
 }
