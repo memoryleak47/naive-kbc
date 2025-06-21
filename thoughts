@@ -1,0 +1,22 @@
+how should I implement the KBO?
+- as "lt" function? Is this generally enough?
+- as "PartialOrd" function? Is this unneessarily complicated and slow?
+
+a<b || a>b || a==b || a~b
+
+a~b := not a<b && not a>b && not a == b
+a <= b := a < b or a==b
+
+
+
+funny idea how to cache lexicographical lookup in an online algorithm, where permanently new strings come in:
+Store for each Symbol a rational number (i.e. x/y).
+And when you want to add another one, do binary search over the strings, and then add the rational number (l+r)/2 for your new thing.
+Issue: realistically this only works 32 times, as we then overflow.
+
+What if we have a "history" of recently added numbers.
+Then every lexicographical number we store has
+(a) a len(history)
+(b) the current index (from the interval 0..len(history))
+
+Then, when using a lexicographical number, we have to bring it "up-to-date" while shifting the index accordingly. And then we compare there.
