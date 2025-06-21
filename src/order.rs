@@ -5,6 +5,12 @@ use std::cmp::*;
 const VAR_WEIGHT: usize = 1;
 fn sym_weight(_x: Symbol) -> usize { 1 }
 
+// When comparing two terms by KBO there's four possible outputs:
+// - terms are equal (Ordering::Equal)
+// - first one is bigger (Ordering::Greater)
+// - second one is bigger (Ordering::Less)
+// - terms are incomparable (None)
+
 impl PartialOrd for Term {
     fn partial_cmp(&self, other: &Term) -> Option<Ordering> {
         let vc = var_cmp(self, other)?;
