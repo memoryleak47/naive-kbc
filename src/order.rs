@@ -206,6 +206,7 @@ mod tst {
         kbo_assert("c < c2");
         kbo_assert("c2 < d");
         kbo_assert("f(X, Y) ~ f(Y, X)");
+        kbo_assert("g(X) > f(a)");
     }
 
     // TODO this should work! but we currently implement "fake KBO" instead of KBO. So this is why it fails.
