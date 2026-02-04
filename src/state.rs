@@ -31,11 +31,11 @@ pub fn simplify(mut rw: Equation, state: &State) -> Equation {
         let (l, r, ori) = &rw;
 
         // output:
-        let l2 = simplify_single(l.clone(), &rw_);
-
-        let r2 = if !ori || ruleorder_gt(&rw, &rw_) {
+        let l2 = if !ori || ruleorder_gt(&rw, &rw_) {
             simplify_single(r.clone(), &rw_)
-        } else { r.clone() };
+        } else { l.clone() };
+
+        let r2 = simplify_single(r.clone(), &rw_);
 
         let ori2 = *ori && (*l == l2);
 
@@ -50,7 +50,8 @@ fn encompassment_gt(a: &Term, b: &Term) -> bool {
 
 // s -> t |> l -> r
 fn ruleorder_gt((s, t, _): &Equation, (l, r, _): &Equation) -> bool {
-    encompassment_gt(s, l) || (/*this should be a "literally similar" check*/ s == l && gt(t, r))
+    let out = encompassment_gt(s, l) || (/*this should be a "literally similar" check*/ s == l && gt(t, r));
+    out
 }
 
 // TODO normalize & deduplicate rules
