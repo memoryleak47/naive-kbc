@@ -4,7 +4,7 @@ pub type Equation = (/*lhs*/ Term, /*rhs*/ Term, /*is oriented*/ bool);
 
 pub type State = Vec<Equation>;
 
-fn kbc(mut state: State) -> State {
+pub fn kbc(mut state: State) -> State {
     for _ in 0..100 {
         state = kbc_step(state);
     }
@@ -53,4 +53,14 @@ fn nondeduce_step(state: State) -> State {
 
 fn deduce_step(state: State) -> State {
     state // TODO
+}
+
+pub fn dump_state(state: &State) {
+    println!("STATE:");
+    for (l, r, ori) in state {
+        let l = l.to_string();
+        let r = r.to_string();
+        let op = if *ori { "->" } else { "=" };
+        println!("{l} {op} {r}");
+    }
 }

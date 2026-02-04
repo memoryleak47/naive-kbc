@@ -22,8 +22,10 @@ mod pat;
 pub use pat::*;
 
 fn main() {
-    // let t = |x| Term::parse(x).unwrap();
-    // dbg!(t("f(X)").partial_cmp(&t("Y")));
-    // dbg!(t("f(X)").partial_cmp(&t("X")));
-    // dbg!(t("f(a, X)").partial_cmp(&t("X")));
+    let state = vec![
+        Equation::parse("f(X) = X").unwrap()
+    ];
+    let state = kbc(state);
+
+    dump_state(&state);
 }

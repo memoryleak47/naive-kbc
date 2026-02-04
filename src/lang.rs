@@ -29,4 +29,24 @@ impl Term {
         let x = gsymb_add(x.to_string());
         Term::Fun(x, Box::new([]))
     }
+
+    pub fn to_string(&self) -> String {
+        match self {
+            Term::Var(v) => gsymb_get(*v),
+            Term::Fun(f, args) => {
+                let f = gsymb_get(*f);
+                if args.len() == 0 { return f }
+                let mut s = f;
+                s.push('(');
+                for (i, a) in args.iter().enumerate() {
+                    s.push_str(&a.to_string());
+                    if i != args.len() - 1 {
+                        s.push_str(", ");
+                    }
+                }
+                s.push(')');
+                s
+            },
+        }
+    }
 }
