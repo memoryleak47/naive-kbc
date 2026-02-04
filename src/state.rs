@@ -25,7 +25,7 @@ fn orient_one((l, r, ori): Equation) -> Equation {
 }
 
 pub fn simplify(mut rw: Equation, state: &State) -> Equation {
-    for rw_@(l_, r_, ori_) in state {
+    for rw_@(_, _, ori_) in state {
         if !ori_ { continue }
 
         let (l, r, ori) = &rw;
