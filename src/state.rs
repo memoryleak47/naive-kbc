@@ -11,7 +11,7 @@ pub fn kbc(mut state: State) -> State {
     state
 }
 
-fn kbc_step(state: State) -> State {
+pub fn kbc_step(state: State) -> State {
     let state = nondeduce_step(state);
     let state = deduce_step(state);
     state

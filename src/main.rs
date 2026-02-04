@@ -25,7 +25,7 @@ fn main() {
     let state = vec![
         Equation::parse("f(X) = X").unwrap()
     ];
-    let state = kbc(state);
+    let state = kbc_step(state);
 
     dump_state(&state);
 }
