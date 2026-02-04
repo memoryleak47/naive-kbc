@@ -15,6 +15,9 @@ pub use symbol::*;
 mod parse;
 pub use parse::*;
 
+mod pat;
+pub use pat::*;
+
 fn main() {
     // let t = |x| Term::parse(x).unwrap();
     // dbg!(t("f(X)").partial_cmp(&t("Y")));
