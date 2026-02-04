@@ -13,11 +13,3 @@ pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
         term => term,
     }
 }
-
-pub fn simplify(mut term: Term, state: &State) -> Term {
-    for rw@(l, r, ori) in state {
-        if !ori { continue }
-        term = simplify_single(term, rw);
-    }
-    term
-}

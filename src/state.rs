@@ -24,15 +24,33 @@ fn orient_one((l, r, ori): Equation) -> Equation {
     (l, r, ori)
 }
 
-fn simplify_one((l, r, ori): Equation, state: &State) -> Equation {
-    let l2 = simplify(l.clone(), state);
+pub fn simplify(mut rw: Equation, state: &State) -> Equation {
+    for rw_@(l_, r_, ori_) in state {
+        if !ori_ { continue }
 
-    if ori {
-        // TODO add |> ordering for rewrites.
+        let (l, r, ori) = &rw;
+
+        // output:
+        let l2 = simplify_single(l.clone(), &rw_);
+
+        let r2 = if !ori || ruleorder_gt(&rw, &rw_) {
+            simplify_single(r.clone(), &rw_)
+        } else { r.clone() };
+
+        let ori2 = *ori && (*l == l2);
+
+        rw = (l2, r2, ori2);
     }
-    let r2 = simplify(r.clone(), state);
-    let ori2 = ori && (l == l2) && (r == r2);
-    (l2, r2, ori2)
+    rw
+}
+
+fn encompassment_gt(a: &Term, b: &Term) -> bool {
+    false // TODO
+}
+
+// s -> t |> l -> r
+fn ruleorder_gt((s, t, _): &Equation, (l, r, _): &Equation) -> bool {
+    encompassment_gt(s, l) || (/*this should be a "literally similar" check*/ s == l && gt(t, r))
 }
 
 // TODO normalize & deduplicate rules
@@ -44,7 +62,7 @@ fn nondeduce_step(state: State) -> State {
 
         let x = x.clone();
         let x = orient_one(x);
-        let x = simplify_one(x, &state);
+        let x = simplify(x, &state);
         new_state.push(x);
     }
 
