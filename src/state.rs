@@ -44,21 +44,24 @@ pub fn simplify(mut rw: Equation, state: &State) -> Equation {
     rw
 }
 
-// t > p, if a subterm of t is a substitution instance of p.
+// t >= p, if a subterm of t is a substitution instance of p.
 // in other words, if a rule with pattern "p" is somewhere applicable in "t".
-fn encompassment_gt(t: &Term, p: &Term) -> bool {
+fn encompassment_gte(t: &Term, p: &Term) -> bool {
     if pat_match(p, t).is_some() { return true }
     let Term::Fun(_f, args) = t else { return false };
     for x in args {
-        if encompassment_gt(x, p) { return true }
+        if encompassment_gte(x, p) { return true }
     }
     false
 }
 
 // s -> t |> l -> r
 fn ruleorder_gt((s, t, _): &Equation, (l, r, _): &Equation) -> bool {
-    let out = encompassment_gt(s, l) || (/*this should be a "literally similar" check*/ s == l && gt(t, r));
-    out
+    if /*this should be a "literally similar" check*/ s == l {
+        gt(t, r)
+    } else {
+        encompassment_gte(s, l)
+    }
 }
 
 // TODO normalize & deduplicate rules
