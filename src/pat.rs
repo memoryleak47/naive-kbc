@@ -9,7 +9,7 @@ pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
     Some(subst)
 }
 
-// subst :: vars(pat) -> vars(t)
+// subst :: vars(pat) -> Term[vars(t)]
 fn pat_match_impl(pat: &Term, t: &Term, subst: &mut Subst) -> Option<()> {
     match pat {
         Term::Var(v) => {
@@ -32,7 +32,12 @@ fn pat_match_impl(pat: &Term, t: &Term, subst: &mut Subst) -> Option<()> {
     Some(())
 }
 
-pub fn unify(pat: &Term, t: &Term) -> Subst { todo!() }
+// assumption: l and r have disjoint sets of vars.
+//
+// maybe this should return separate substs:
+// subst_lr :: vars(l) -> Term[vars(r)]
+// subst_rl :: vars(r) -> Term[vars(l)]
+pub fn unify(l: &Term, r: &Term) -> Subst { todo!() }
 
 mod tests {
     use crate::*;
