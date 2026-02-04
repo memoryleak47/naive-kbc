@@ -23,7 +23,8 @@ pub use pat::*;
 
 fn main() {
     let mut state = vec![
-        Equation::parse("f(X) = f(f(X))").unwrap()
+        Equation::parse("f(X) = f(f(X))").unwrap(),
+        Equation::parse("f(Y) = Y").unwrap()
     ];
     dump_state(&state);
 
