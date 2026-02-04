@@ -5,13 +5,13 @@ use std::fmt::Display;
 // syntax: f(c) = Y.
 // capital letters are only for variables.
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct Equation {
     pub lhs: Term,
     pub rhs: Term,
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone)]
 pub enum Term {
     Var(Symbol),
 
