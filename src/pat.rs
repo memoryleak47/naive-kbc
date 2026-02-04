@@ -48,4 +48,16 @@ mod tests {
         correct_subst.insert(gsymb_add(format!("X")), a);
         assert!(subst == correct_subst);
     }
+
+    #[test]
+    fn test_match2() {
+        let pat = Term::parse("A").unwrap();
+        let t = Term::parse("f(a, f(X, z))").unwrap();
+        let subst = pat_match(&pat, &t).unwrap();
+        let a = Term::parse("a").unwrap();
+
+        let mut correct_subst = Subst::default();
+        correct_subst.insert(gsymb_add(format!("A")), t.clone());
+        assert!(subst == correct_subst);
+    }
 }
