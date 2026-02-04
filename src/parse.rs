@@ -72,7 +72,7 @@ impl Parse for Equation {
         let (tokens, lhs) = Term::assemble(tokens)?;
         let [Token::Equals, tokens@..] = tokens else { return None; };
         let (tokens, rhs) = Term::assemble(tokens)?;
-        let eq = Equation { lhs, rhs };
+        let eq = (lhs, rhs, false);
         Some((tokens, eq))
     }
 }
