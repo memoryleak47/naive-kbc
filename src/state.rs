@@ -32,7 +32,7 @@ pub fn simplify(mut rw: Equation, state: &State) -> Equation {
 
         // output:
         let l2 = if !ori || ruleorder_gt(&rw, &rw_) {
-            simplify_single(r.clone(), &rw_)
+            simplify_single(l.clone(), &rw_)
         } else { l.clone() };
 
         let r2 = simplify_single(r.clone(), &rw_);
