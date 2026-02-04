@@ -33,11 +33,42 @@ fn pat_match_impl(pat: &Term, t: &Term, subst: &mut Subst) -> Option<()> {
 }
 
 // assumption: l and r have disjoint sets of vars.
-//
-// maybe this should return separate substs:
-// subst_lr :: vars(l) -> Term[vars(r)]
-// subst_rl :: vars(r) -> Term[vars(l)]
-pub fn unify(l: &Term, r: &Term) -> Subst { todo!() }
+pub fn unify(l: &Term, r: &Term) -> Option<Subst> {
+    let mut subst = Default::default();
+    unify_impl(l, r, &mut subst)?;
+    Some(subst)
+}
+
+fn unify_impl(l: &Term, r: &Term, subst: &mut Subst) -> Option<()> {
+    // replace defined vars.
+    if let Term::Var(lv) = l && let Some(lt) = subst.get(lv) {
+        return unify_impl(&lt.clone(), r, subst);
+    }
+    if let Term::Var(rv) = r && let Some(rt) = subst.get(rv) {
+        return unify_impl(l, &rt.clone(), subst);
+    }
+
+    // define vars.
+    if let Term::Var(lv) = l && subst.get(lv).is_none() {
+        subst.insert(*lv, r.clone());
+        return unify_impl(l, r, subst);
+    }
+    if let Term::Var(rv) = r && subst.get(rv).is_none() {
+        subst.insert(*rv, l.clone());
+        return unify_impl(l, r, subst);
+    }
+
+    let Term::Fun(lf, largs) = l else { unreachable!() };
+    let Term::Fun(rf, rargs) = r else { unreachable!() };
+
+    if lf != rf { return None }
+    if largs.len() != rargs.len() { return None }
+    for (ll, rr) in largs.iter().zip(rargs.iter()) {
+        unify_impl(ll, rr, subst)?;
+    }
+    Some(())
+}
+
 
 mod tests {
     use crate::*;
