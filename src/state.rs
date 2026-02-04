@@ -19,8 +19,8 @@ fn kbc_step(state: State) -> State {
 
 fn orient_one((l, r, ori): Equation) -> Equation {
     if ori { return (l, r, ori) }
-    if gt(&l, &r) { return (l, r, ori) }
-    if gt(&r, &l) { return (r, l, ori) }
+    if gt(&l, &r) { return (l, r, true) }
+    if gt(&r, &l) { return (r, l, true) }
     (l, r, ori)
 }
 
