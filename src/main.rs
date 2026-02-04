@@ -22,10 +22,14 @@ mod pat;
 pub use pat::*;
 
 fn main() {
-    let state = vec![
-        Equation::parse("f(X) = X").unwrap()
+    let mut state = vec![
+        Equation::parse("f(X) = f(f(X))").unwrap()
     ];
-    let state = kbc_step(state);
-
     dump_state(&state);
+
+    for _ in 0..10 {
+        println!("-------------------------");
+        state = kbc_step(state);
+        dump_state(&state);
+    }
 }
