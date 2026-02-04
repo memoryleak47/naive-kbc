@@ -1,7 +1,7 @@
 use crate::*;
 
 #[derive(Debug)]
-enum Token {
+pub enum Token {
     LParen, RParen,
     Equals,
     Comma,

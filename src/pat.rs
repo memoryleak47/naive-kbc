@@ -70,6 +70,7 @@ fn unify_impl(l: &Term, r: &Term, subst: &mut Subst) -> Option<()> {
 }
 
 
+#[cfg(test)]
 mod tests {
     use crate::*;
 

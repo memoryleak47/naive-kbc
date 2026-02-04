@@ -39,8 +39,8 @@ pub fn gt(s: &Term, t: &Term) -> bool {
 
 fn weight(t: &Term) -> usize {
     match t {
-        Term::Var(v) => 1,
-        Term::Fun(f, children) => 1 + children.iter().map(weight).sum::<usize>(),
+        Term::Var(_) => 1,
+        Term::Fun(_, children) => 1 + children.iter().map(weight).sum::<usize>(),
     }
 }
 
@@ -55,7 +55,7 @@ fn acc_vars(t: &Term, acc: &mut BTreeMap<Symbol, usize>) {
         Term::Var(v) => {
             *acc.entry(*v).or_default() += 1;
         }
-        Term::Fun(f, children) => {
+        Term::Fun(_, children) => {
             for x in children.iter() {
                 acc_vars(x, acc);
             }
@@ -64,7 +64,7 @@ fn acc_vars(t: &Term, acc: &mut BTreeMap<Symbol, usize>) {
 }
 
 
-
+#[cfg(test)]
 mod tst {
     use crate::*;
 
