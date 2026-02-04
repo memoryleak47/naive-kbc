@@ -2,6 +2,22 @@ use crate::*;
 
 pub type Subst = BTreeMap<Symbol, Term>;
 
+pub fn apply_subst(t: &Term, subst: &Subst) -> Term {
+    match t {
+        Term::Var(v) => {
+            if let Some(t2) = subst.get(v) {
+                t2.clone()
+            } else {
+                Term::Var(*v)
+            }
+        },
+        Term::Fun(f, args) => {
+            let args = args.iter().map(|x| apply_subst(x, subst)).collect();
+            Term::Fun(*f, args)
+        },
+    }
+}
+
 // assumption: pat and t have disjoint sets of vars.
 pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
     let mut subst = Default::default();

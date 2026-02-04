@@ -6,6 +6,9 @@ pub use lang::*;
 mod state;
 pub use state::*;
 
+mod simplify;
+pub use simplify::*;
+
 mod order;
 pub use order::*;
 
