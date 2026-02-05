@@ -1,6 +1,9 @@
 use crate::*;
 
 pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
+    let (_, _, ori) = eq;
+    assert!(ori);
+
     // root level application
     if let Some(subst) = pat_match(&eq.0, &term) {
         term = apply_subst(&eq.1, &subst);

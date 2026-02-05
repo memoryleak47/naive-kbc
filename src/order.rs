@@ -25,6 +25,8 @@ pub fn gt(s: &Term, t: &Term) -> bool {
 
     assert_eq!(fs, ft);
 
+    assert_eq!(ls.len(), lt.len());
+
     for (cs, ct) in ls.iter().zip(lt.iter()) {
         if gt(cs, ct) { return true }
 
