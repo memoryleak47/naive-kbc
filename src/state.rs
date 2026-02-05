@@ -64,6 +64,42 @@ fn ruleorder_gt((s, t, _): &Equation, (l, r, _): &Equation) -> bool {
     }
 }
 
+fn canonize_vars((l, r, ori): Equation) -> Equation {
+    let mut v: Vec<Symbol> = Vec::new();
+    acc_var_order(&l, &mut v);
+    acc_var_order(&r, &mut v);
+
+    let mut subst = Subst::new();
+    for (i, x) in v.iter().enumerate() {
+        let l = &["X", "Y", "W", "V", "U", "T", "S"];
+        let a = l[i%7];
+        let b = i/7;
+        let b = if b == 0 { String::new() } else { format!("{}", b+1) };
+        let c = format!("{a}{b}");
+        let c = gsymb_add(c);
+        subst.insert(*x, Term::Var(c));
+    }
+    let (l, r) = (apply_subst(&l, &subst), apply_subst(&r, &subst));
+
+    (l, r, ori)
+}
+
+fn acc_var_order(t: &Term, acc: &mut Vec<Symbol>) {
+    match t {
+        Term::Var(v) => {
+            if !acc.contains(v) {
+                acc.push(*v);
+            }
+        }
+        Term::Fun(_, children) => {
+            for x in children.iter() {
+                acc_var_order(x, acc);
+            }
+        },
+    }
+}
+
+
 // TODO normalize & deduplicate rules
 fn nondeduce_step(state: State) -> State {
     let mut new_state = Vec::new();
@@ -74,7 +110,10 @@ fn nondeduce_step(state: State) -> State {
         let x = x.clone();
         let x = orient_one(x);
         let x = simplify(x, &state);
-        new_state.push(x);
+        let x = canonize_vars(x);
+        if !new_state.contains(&x) {
+            new_state.push(x);
+        }
     }
 
     new_state
