@@ -19,6 +19,7 @@ pub fn apply_subst(t: &Term, subst: &Subst) -> Term {
 }
 
 // pat and t might have shared variables among them.
+// TODO: having shared vars between 'pat' and 't' causes infinite loops, as applying the subst can loop.
 pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
     let mut subst = Default::default();
     pat_match_impl(pat, t, &mut subst)?;
