@@ -13,8 +13,11 @@ pub fn deduce_step(mut state: State) -> State {
                 let Some(sig) = unify(&la, pos_idx(&ra, &p)) else { continue };
                 let ll = apply_subst(&pos_set(&ra, &p, &lb), &sig);
                 let rr = apply_subst(&rb, &sig);
-                // TODO normalize cps here
-                cps.push((ll, rr, false));
+                let eq = (ll, rr, false);
+                let eq = simplify_converge(eq, &state);
+                if eq.0 != eq.1 {
+                    cps.push(eq);
+                }
             }
         }
     }

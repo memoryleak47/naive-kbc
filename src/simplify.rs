@@ -1,5 +1,33 @@
 use crate::*;
 
+pub fn simplify_converge(mut eq: Equation, state: &State) -> Equation {
+    loop {
+        let eq2 = simplify(eq.clone(), state);
+        if eq == eq2 { return eq }
+        eq = eq2;
+    }
+}
+
+pub fn simplify(mut rw: Equation, state: &State) -> Equation {
+    for rw_@(_, _, ori_) in state {
+        if !ori_ { continue }
+
+        let (l, r, ori) = &rw;
+
+        // output:
+        let l2 = if !ori || ruleorder_gt(&rw, &rw_) {
+            simplify_single(l.clone(), &rw_)
+        } else { l.clone() };
+
+        let r2 = simplify_single(r.clone(), &rw_);
+
+        let ori2 = *ori && (*l == l2);
+
+        rw = (l2, r2, ori2);
+    }
+    rw
+}
+
 pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
     let (_, _, ori) = eq;
     assert!(ori);
@@ -16,3 +44,24 @@ pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
         term => term,
     }
 }
+
+// s -> t |> l -> r
+fn ruleorder_gt((s, t, _): &Equation, (l, r, _): &Equation) -> bool {
+    if /*this should be a "literally similar" check*/ s == l {
+        gt(t, r)
+    } else {
+        encompassment_gte(s, l)
+    }
+}
+
+// t >= p, if a subterm of t is a substitution instance of p.
+// in other words, if a rule with pattern "p" is somewhere applicable in "t".
+fn encompassment_gte(t: &Term, p: &Term) -> bool {
+    if pat_match(p, t).is_some() { return true }
+    let Term::Fun(_f, args) = t else { return false };
+    for x in args {
+        if encompassment_gte(x, p) { return true }
+    }
+    false
+}
+
