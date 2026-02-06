@@ -9,7 +9,8 @@ pub fn kbc(mut state: State) -> State {
     for i in 0.. {
         println!("-------------------");
         let state2 =
-            if i%2 == 0 { nondeduce_step(state.clone()) }
+            // TODO re-allow deduce.
+            if true { nondeduce_step(state.clone()) }
             else { deduce_step(state.clone()) };
         if state == state2 { break }
         state = state2;

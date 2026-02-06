@@ -40,6 +40,10 @@ fn main() {
         Equation::parse("m(m(X,Y),Z) = m(X,m(Y,Z))").unwrap(),
         Equation::parse("a = m(d,e)").unwrap(),
         Equation::parse("b = d").unwrap(),
+
+        // for debugging:
+        Equation::parse("m(e, R2) = m(n(R1), m(R1, R2))").unwrap(),
+
         // We are looking for 'a = b'.
     ];
     kbc(state);
