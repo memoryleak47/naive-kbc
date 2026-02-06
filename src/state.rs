@@ -6,18 +6,15 @@ pub type State = Vec<Equation>;
 
 pub fn kbc(mut state: State) -> State {
     dump_state(&state);
-    loop {
+    for i in 0.. {
         println!("-------------------");
-        let state2 = kbc_step(state.clone());
-        if state == state2 { return state }
+        let state2 =
+            if i%2 == 0 { nondeduce_step(state.clone()) }
+            else { deduce_step(state.clone()) };
+        if state == state2 { break }
         state = state2;
         dump_state(&state);
     }
-}
-
-pub fn kbc_step(state: State) -> State {
-    let state = nondeduce_step(state);
-    let state = deduce_step(state);
     state
 }
 
