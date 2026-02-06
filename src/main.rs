@@ -27,6 +27,9 @@ pub use deduce::*;
 mod rename;
 pub use rename::*;
 
+mod pos;
+pub use pos::*;
+
 fn main() {
     let mut state = vec![
         Equation::parse("f(g(X)) = g(f(X))").unwrap(),

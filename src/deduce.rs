@@ -1,7 +1,5 @@
 use crate::*;
 
-type Pos = Vec<usize>;
-
 pub fn deduce_step(mut state: State) -> State {
     let mut cps = Vec::new();
     for l@(_, _, lori) in &state {
@@ -17,8 +15,4 @@ pub fn deduce_step(mut state: State) -> State {
     }
     state.extend(cps);
     state
-}
-
-fn positions(t: &Term) -> Vec<Pos> {
-    todo!()
 }
