@@ -15,7 +15,8 @@ pub fn deduce_step(mut state: State) -> State {
                 let rr = apply_subst(&rb, &sig);
                 let eq = (ll, rr, false);
                 let eq = simplify_converge(eq, &state);
-                if eq.0 != eq.1 {
+                let eq = canonize_vars(eq);
+                if eq.0 != eq.1 && !cps.contains(&eq) && !state.contains(&eq) {
                     cps.push(eq);
                 }
             }
