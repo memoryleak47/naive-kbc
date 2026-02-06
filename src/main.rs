@@ -21,6 +21,9 @@ pub use parse::*;
 mod pat;
 pub use pat::*;
 
+mod unify;
+pub use unify::*;
+
 mod deduce;
 pub use deduce::*;
 
