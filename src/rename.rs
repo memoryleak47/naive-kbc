@@ -16,9 +16,9 @@ pub fn canonize_vars_r(e: Equation) -> Equation {
 
 pub fn canonize_vars(e: Equation) -> Equation {
     canonize_vars_generic(e, |i| {
-        let l = &["X", "Y", "W", "V", "U", "T", "S"];
-        let a = l[i%7];
-        let b = i/7;
+        let l = &["X", "Y", "Z", "W", "V", "U", "T", "S"];
+        let a = l[i%8];
+        let b = i/8;
         let b = if b == 0 { String::new() } else { format!("{}", b+1) };
         let c = format!("{a}{b}");
         gsymb_add(c)

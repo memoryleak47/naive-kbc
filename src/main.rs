@@ -35,11 +35,12 @@ pub use pos::*;
 
 fn main() {
     let state = vec![
-        Equation::parse("f(g(X)) = g(f(X))").unwrap(),
-        Equation::parse("f(f(Y)) = Y").unwrap(),
-        Equation::parse("g(g(Y)) = Y").unwrap(),
-        Equation::parse("g(g(A)) = A").unwrap(),
-        Equation::parse("Z = f(g(f(g(Z))))").unwrap(),
+        Equation::parse("m(e,X) = X").unwrap(),
+        Equation::parse("m(n(X),X) = e").unwrap(),
+        Equation::parse("m(m(X,Y),Z) = m(X,m(Y,Z))").unwrap(),
+        Equation::parse("a = m(d,e)").unwrap(),
+        Equation::parse("b = d").unwrap(),
+        // We are looking for 'a = b'.
     ];
     kbc(state);
 }
