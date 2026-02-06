@@ -9,7 +9,12 @@ pub fn deduce_step(mut state: State) -> State {
             let (la, lb, _) = canonize_vars_l(l.clone());
             let (ra, rb, _) = canonize_vars_r(r.clone());
 
-            for p in positions(&la) {
+            for p in positions(&ra) {
+                let Some(sig) = unify(&la, pos_idx(&ra, &p)) else { continue };
+                let ll = apply_subst(&pos_set(&ra, &p, &lb), &sig);
+                let rr = apply_subst(&rb, &sig);
+                // TODO normalize cps here
+                cps.push((ll, rr, false));
             }
         }
     }
