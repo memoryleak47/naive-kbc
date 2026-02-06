@@ -9,6 +9,8 @@ pub fn unify(l: &Term, r: &Term) -> Option<Subst> {
 
 // invariants: subst is always fully simplified w.r.t. itself.
 fn unify_impl(l: &Term, r: &Term, subst: &mut Subst) -> Option<()> {
+    if l == r { return Some(()) }
+
     // replace defined vars.
     if let Term::Var(lv) = l && let Some(lt) = subst.get(lv) {
         return unify_impl(&lt.clone(), r, subst);
