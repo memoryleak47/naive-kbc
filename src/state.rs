@@ -8,10 +8,8 @@ pub fn kbc(mut state: State) -> State {
     dump_state(&state);
     for i in 0.. {
         println!("-------------------");
-        let state2 =
-            // TODO re-allow deduce.
-            if true { nondeduce_step(state.clone()) }
-            else { deduce_step(state.clone()) };
+        let state2 = nondeduce_step(state.clone());
+        let state2 = deduce_step(state2.clone());
         if state == state2 { break }
         state = state2;
         dump_state(&state);
@@ -26,7 +24,6 @@ fn orient_one((l, r, ori): Equation) -> Equation {
     (l, r, ori)
 }
 
-// TODO normalize & deduplicate rules
 fn nondeduce_step(state: State) -> State {
     let mut new_state = Vec::new();
     for x in &state {

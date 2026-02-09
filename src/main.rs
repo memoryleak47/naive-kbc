@@ -37,21 +37,9 @@ fn main() {
     let state = vec![
         Equation::parse("m(e,X) = X").unwrap(),
         Equation::parse("m(n(X),X) = e").unwrap(),
-        Equation::parse("m(e, R2) = m(n(R1), m(R1, R2))").unwrap(),
-    ];
-    kbc(state);
-}
-
-fn main_old() {
-    let state = vec![
-        Equation::parse("m(e,X) = X").unwrap(),
-        Equation::parse("m(n(X),X) = e").unwrap(),
         Equation::parse("m(m(X,Y),Z) = m(X,m(Y,Z))").unwrap(),
         Equation::parse("a = m(d,e)").unwrap(),
         Equation::parse("b = d").unwrap(),
-
-        // for debugging:
-        Equation::parse("m(e, R2) = m(n(R1), m(R1, R2))").unwrap(),
 
         // We are looking for 'a = b'.
     ];
