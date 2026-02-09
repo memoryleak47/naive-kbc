@@ -18,9 +18,14 @@ pub fn apply_subst(t: &Term, subst: &Subst) -> Term {
     }
 }
 
-// pat and t might have shared variables among them.
-// TODO: having shared vars between 'pat' and 't' causes infinite loops, as applying the subst can loop.
+// pat and t are not allowed to share variables.
+// (otherwise the 'subst' can create cyclic simplifications)
 pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
+    // disjointness requirement.
+    let l1 = get_vars(pat);
+    let l2 = get_vars(t);
+    assert!(l1.keys().all(|x| !l2.contains_key(x)));
+
     let mut subst = Default::default();
     pat_match_impl(pat, t, &mut subst)?;
     Some(subst)

@@ -46,7 +46,7 @@ fn weight(t: &Term) -> usize {
     }
 }
 
-fn get_vars(t: &Term) -> BTreeMap<Symbol, usize> {
+pub fn get_vars(t: &Term) -> BTreeMap<Symbol, usize> {
     let mut out = BTreeMap::new();
     acc_vars(&t, &mut out);
     out
