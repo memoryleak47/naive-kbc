@@ -18,14 +18,14 @@ pub fn apply_subst(t: &Term, subst: &Subst) -> Term {
     }
 }
 
-pub fn v_disjoint(l1: BTreeMap<Symbol, usize>, l2: BTreeMap<Symbol, usize>) -> bool {
+pub fn v_disjoint(l1: &BTreeMap<Symbol, usize>, l2: &BTreeMap<Symbol, usize>) -> bool {
     l1.keys().all(|x| !l2.contains_key(x))
 }
 
 // pat and t are not allowed to share variables.
 // (otherwise the 'subst' can create cyclic simplifications)
 pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
-    assert!(v_disjoint(get_vars(pat), get_vars(t)));
+    assert!(v_disjoint(&get_vars(pat), &get_vars(t)));
 
     let mut subst = Default::default();
     pat_match_impl(pat, t, &mut subst)?;
@@ -82,4 +82,22 @@ mod tests {
         correct_subst.insert(gsymb_add(format!("A")), t.clone());
         assert!(subst == correct_subst);
     }
+}
+
+pub fn literally_similar(l: &Term, r: &Term) -> bool {
+    let lvars = get_vars(l);
+    let rvars = get_vars(r);
+    assert!(v_disjoint(&lvars, &rvars));
+    if lvars.len() != rvars.len() { return false }
+
+    let Some(sig) = pat_match(l, r) else { return false };
+    let mut v = Vec::new();
+    for x in lvars.keys() {
+        let Some(Term::Var(vv)) = sig.get(x) else { return false };
+        v.push(vv);
+    }
+    v.sort();
+    v.dedup();
+
+    v.len() == lvars.len()
 }

@@ -14,7 +14,7 @@ pub fn simplify_converge(eq: Equation, state: &State) -> Equation {
 pub fn simplify(mut rw: Equation, state: &State) -> Equation {
     for rw_@(_, _, ori_) in state {
         if !ori_ { continue }
-        assert!(v_disjoint(get_vars_eq(&rw), get_vars_eq(&rw_)));
+        assert!(v_disjoint(&get_vars_eq(&rw), &get_vars_eq(&rw_)));
 
         let (l, r, ori) = &rw;
 
@@ -36,7 +36,7 @@ pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
     let (_, _, ori) = eq;
     assert!(ori);
 
-    assert!(v_disjoint(get_vars(&term), get_vars_eq(&eq)));
+    assert!(v_disjoint(&get_vars(&term), &get_vars_eq(&eq)));
 
     // root level application
     if let Some(subst) = pat_match(&eq.0, &term) {
@@ -53,7 +53,7 @@ pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
 
 // s -> t |> l -> r
 fn ruleorder_gt((s, t, _): &Equation, (l, r, _): &Equation) -> bool {
-    if /*this should be a "literally similar" check*/ s == l {
+    if literally_similar(&s, &l) {
         gt(t, r)
     } else {
         encompassment_gte(s, l)
