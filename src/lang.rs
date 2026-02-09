@@ -50,3 +50,37 @@ impl Term {
         }
     }
 }
+
+mod fmt {
+    use crate::*;
+    use std::fmt::*;
+
+    impl Display for Symbol {
+        fn fmt(&self, f: &mut Formatter<'_>) -> Result { write!(f, "{}", gsymb_get(*self)) }
+    }
+
+    impl Display for Term {
+        fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+            match self {
+                Term::Var(v) => write!(f, "{v}"),
+                Term::Fun(fun, args) => {
+                    write!(f, "{fun}")?;
+                    if args.len() == 0 { return Ok(()) }
+
+                    write!(f, "(")?;
+                    for (i, a) in args.iter().enumerate() {
+                        write!(f, "{a}")?;
+                        if i != args.len() - 1 {
+                            write!(f, ", ")?;
+                        }
+                    }
+                    write!(f, ")")?;
+                    Ok(())
+                },
+            }
+        }
+    }
+
+    impl Debug for Symbol { fn fmt(&self, f: &mut Formatter<'_>) -> Result { write!(f, "{}", self) } }
+    impl Debug for Term { fn fmt(&self, f: &mut Formatter<'_>) -> Result { write!(f, "{}", self) } }
+}

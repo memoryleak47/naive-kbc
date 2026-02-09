@@ -102,3 +102,10 @@ pub fn literally_similar(l: &Term, r: &Term) -> bool {
 
     v.len() == lvars.len()
 }
+
+#[test]
+fn test_pat_match() {
+    let p = Term::parse("m(n(A), A)").unwrap();
+    let t = Term::parse("m(n(X), m(X, Y))").unwrap();
+    assert_eq!(None, pat_match(&p, &t));
+}
