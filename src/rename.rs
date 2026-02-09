@@ -7,6 +7,15 @@ pub fn canonize_vars_l(e: Equation) -> Equation {
     })
 }
 
+// This renaming will be used for a term that we are currently rewriting.
+// It cannot collide with any other variable names.
+pub fn canonize_vars_d(e: Equation) -> Equation {
+    canonize_vars_generic(e, |i| {
+        let c = format!("D{i}");
+        gsymb_add(c)
+    })
+}
+
 pub fn canonize_vars_r(e: Equation) -> Equation {
     canonize_vars_generic(e, |i| {
         let c = format!("R{i}");

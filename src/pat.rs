@@ -18,13 +18,14 @@ pub fn apply_subst(t: &Term, subst: &Subst) -> Term {
     }
 }
 
+pub fn v_disjoint(l1: BTreeMap<Symbol, usize>, l2: BTreeMap<Symbol, usize>) -> bool {
+    l1.keys().all(|x| !l2.contains_key(x))
+}
+
 // pat and t are not allowed to share variables.
 // (otherwise the 'subst' can create cyclic simplifications)
 pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
-    // disjointness requirement.
-    let l1 = get_vars(pat);
-    let l2 = get_vars(t);
-    assert!(l1.keys().all(|x| !l2.contains_key(x)));
+    assert!(v_disjoint(get_vars(pat), get_vars(t)));
 
     let mut subst = Default::default();
     pat_match_impl(pat, t, &mut subst)?;

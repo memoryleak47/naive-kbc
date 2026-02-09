@@ -52,6 +52,13 @@ pub fn get_vars(t: &Term) -> BTreeMap<Symbol, usize> {
     out
 }
 
+pub fn get_vars_eq((l, r, _): &Equation) -> BTreeMap<Symbol, usize> {
+    let mut out = BTreeMap::new();
+    acc_vars(&l, &mut out);
+    acc_vars(&r, &mut out);
+    out
+}
+
 fn acc_vars(t: &Term, acc: &mut BTreeMap<Symbol, usize>) {
     match t {
         Term::Var(v) => {

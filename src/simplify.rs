@@ -1,6 +1,9 @@
 use crate::*;
 
-pub fn simplify_converge(mut eq: Equation, state: &State) -> Equation {
+pub fn simplify_converge(eq: Equation, state: &State) -> Equation {
+    // bring eq into special d normal form to differentiate it from other rules.
+    let mut eq = canonize_vars_d(eq);
+
     loop {
         let eq2 = simplify(eq.clone(), state);
         if eq == eq2 { return eq }
@@ -11,6 +14,7 @@ pub fn simplify_converge(mut eq: Equation, state: &State) -> Equation {
 pub fn simplify(mut rw: Equation, state: &State) -> Equation {
     for rw_@(_, _, ori_) in state {
         if !ori_ { continue }
+        assert!(v_disjoint(get_vars_eq(&rw), get_vars_eq(&rw_)));
 
         let (l, r, ori) = &rw;
 
@@ -31,6 +35,8 @@ pub fn simplify(mut rw: Equation, state: &State) -> Equation {
 pub fn simplify_single(mut term: Term, eq: &Equation) -> Term {
     let (_, _, ori) = eq;
     assert!(ori);
+
+    assert!(v_disjoint(get_vars(&term), get_vars_eq(&eq)));
 
     // root level application
     if let Some(subst) = pat_match(&eq.0, &term) {
