@@ -25,30 +25,40 @@ pub fn v_disjoint(l1: &BTreeMap<Symbol, usize>, l2: &BTreeMap<Symbol, usize>) ->
 // pat and t are not allowed to share variables.
 // (otherwise the 'subst' can create cyclic simplifications)
 pub fn pat_match(pat: &Term, t: &Term) -> Option<Subst> {
-    assert!(v_disjoint(&get_vars(pat), &get_vars(t)));
+    let pat_vars = get_vars(pat);
+    let t_vars = get_vars(t);
+    assert!(v_disjoint(&pat_vars, &t_vars));
 
     let mut subst = Default::default();
-    pat_match_impl(pat, t, &mut subst)?;
+    pat_match_impl(pat, t, &mut subst, &pat_vars)?;
     Some(subst)
 }
 
 // subst :: vars(pat) -> Term[vars(t)]
-fn pat_match_impl(pat: &Term, t: &Term, subst: &mut Subst) -> Option<()> {
+fn pat_match_impl(pat: &Term, t: &Term, subst: &mut Subst, pat_vars: &BTreeMap<Symbol, usize>) -> Option<()> {
     match pat {
         Term::Var(v) => {
             if let Some(tv) = subst.get(v) {
                 let tv = tv.clone();
-                return pat_match_impl(&tv, t, subst);
+                return pat_match_impl(&tv, t, subst, pat_vars);
             }
 
-            subst.insert(*v, t.clone());
+            // we only insert stuff into pat-vars, not the non-pat vars that we from a prior subst.
+            if pat_vars.contains_key(&v) {
+                subst.insert(*v, t.clone());
+            } else {
+                return match t {
+                    Term::Var(vv) if v == vv => Some(()),
+                    _ => None,
+                };
+            }
         },
         Term::Fun(f, args) => {
             let Term::Fun(f2, args2) = t else { return None };
             if f != f2 { return None }
             if args.len() != args2.len() { return None }
             for (x, y) in args.iter().zip(args2.iter()) {
-                pat_match_impl(x, y, subst)?;
+                pat_match_impl(x, y, subst, pat_vars)?;
             }
         },
     }
