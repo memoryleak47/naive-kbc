@@ -84,6 +84,7 @@ mod tests {
     }
 }
 
+// This check could potentially be deprecated by a consistent variable naming.
 pub fn literally_similar(l: &Term, r: &Term) -> bool {
     let lvars = get_vars(l);
     let rvars = get_vars(r);
